@@ -2,7 +2,7 @@
 CSS reset
 Is a short set of CSS rules that resets the styling of all HTML elements to a consistent baseline so the website will look the same on all browsers
 */
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +10,7 @@ Is a short set of CSS rules that resets the styling of all HTML elements to a co
   font-size: 100%;
   /*The box-sizing property is used to tell the browser what the sizing properties (width and height) should include border-box.*/
   box-sizing: border-box;
+  
   /*reset Chrome user agent styles*/
   -webkit-margin-before: 0px;
   -webkit-margin-after: 0px;
@@ -30,7 +31,7 @@ body {
   /* border: 3px solid white; */
   margin: 0;
   padding: 0;
-  font-family: 'aglet-slab', sans-serif;
+  font-family: 'Montserrat', sans-serif;;
   text-align: center;
   font-size: normal;
 }
@@ -64,6 +65,7 @@ button {
   border: 1px solid #747070;
   border-radius: 190px;
   width: 13%;
+  font-weight: bolder;
 }
 
 button:hover {
@@ -71,6 +73,7 @@ button:hover {
   background-color: lightskyblue;
   cursor: pointer;
   color: black;
+  
 }
 
 /* Add a blue text color to links */
@@ -80,22 +83,25 @@ a {
   text-decoration: none;
   color: rgb(71, 30, 255);
   padding: 15px;
+  font-weight: bolder;
 }
 
 a:hover {
   color: purple;
+  font-weight: bolder;
 }
 
 h1 {
   text-align: center;
   font-size: 20px;
+  font-weight: bolder;
 }
 
 h2 {
   /* text-align:center; 
   font-size: 40px; */
   /* font-family: 'skolar-sans-latin-extended', sans-serif; */
-  font-family: 'Pacifico', cursive;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 2.25rem;
@@ -103,7 +109,7 @@ h2 {
 }
 
 h3 {
-  font-family: 'skolar-sans-latin-extended', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 2rem;
@@ -111,7 +117,7 @@ h3 {
 }
 
 h4 {
-  font-family: 'aglet-slab', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1.0625rem;
@@ -121,7 +127,7 @@ h4 {
 }
 
 h5 {
-  font-family: 'aglet-slab', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1.09rem;
@@ -132,7 +138,7 @@ h5 {
 }
 
 p {
-  font-family: 'aglet-slab', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 1.0625rem;
@@ -182,7 +188,7 @@ Content styles (Main Module)
 */
 
 .landing-main {
-  background-image: url('background-img.jpg')!important;
+  background-image: url('background-image.jpg')!important;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -212,7 +218,7 @@ Content styles (Main Module)
   margin: 15px 0px;
   margin-left: 30%;
   margin-right: 30%;
-  background-color: pink;
+  background-color:#69ca89;
   color: black;
   padding: 10px 5px;
   text-align: center;
@@ -227,7 +233,7 @@ Content styles (Main Module)
   margin: 15px 0px;
   margin-left: 30%;
   margin-right: 30%;
-  background-color: pink;
+  background-color: #69ca89;
   color: black;
   padding: 10px 5px;
   text-align: center;
@@ -235,6 +241,10 @@ Content styles (Main Module)
   font-size: 15px;
   border: 1px solid #361f1f;
   border-radius: 19px;
+}
+.show-button:hover {
+  /* opacity: 1; */
+  background-color: #FDDA0D;
 }
 .button-wrapper {
   text-align: center;
@@ -269,7 +279,7 @@ margin-left: 0;
 
 .go-button:hover {
   /* opacity: 1; */
-  background-color: lightskyblue;
+  background-color: #FDDA0D;
   cursor: pointer;
   color: black;
 }
@@ -396,6 +406,7 @@ margin-left: 0;
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
+  font-weight: bolder;
 }
 
 /* inventoryTable component */
@@ -415,7 +426,7 @@ margin-left: 0;
 }
 
 .nav h2 {
-  font-family: 'Pacifico', cursive;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* NavBar component */
