@@ -41,9 +41,7 @@ class ShoppersSearch extends React.Component {
 
     validateSearchTerm() {
         const searchTerm = this.state.searchTerm.value.trim();
-        if (searchTerm.length === 0) {
-            return "SearchTerm is required"
-        } else if (searchTerm.length < 2) {
+       if (searchTerm.length >0 && searchTerm.length < 2) {
             return (
                 "SearchTerm must be at least 2 characters long"
             );
@@ -122,7 +120,7 @@ class ShoppersSearch extends React.Component {
                         <div className="errorMessage">
                             {msg}
                         </div>
-                        <label htmlFor="searchTerm">SearchTerm</label>
+                        
                         <input
                             type="text"
                             id="searchTerm"
