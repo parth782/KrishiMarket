@@ -141,12 +141,15 @@ class ShoppersSearch extends React.Component {
                         />
 
                         <div className="button-wrapper">
-                            <Link
+                            <button
+                                
                                 className="go-button"
                                 type="submit"
+                                style={{fontWeight: '100' }
+                            }
                             >
                                 Search
-                        </Link>
+                        </button>
 
                             <Link className="show-button" to="/" onClick={this.ShowAll}>
                                 <span className='navlink-text'>Show all</span>
