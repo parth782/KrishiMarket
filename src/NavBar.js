@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import TokenService from "./services/token-service.js"
 import { Link } from 'react-router-dom'
-
+import background from './v915-wit-011-l.jpg';
 
 class NavBar extends Component {
 
@@ -18,7 +18,12 @@ class NavBar extends Component {
     render() {
 
         return (
-            <header className='clearfix'>
+            <header className='clearfix' style={{
+                backgroundImage: `url(${background})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}>
                 <h2 >
                     <Link to="/" style={{fontSize:'35px'}}>
                         Krishi Market
@@ -46,6 +51,12 @@ class NavBar extends Component {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/Myorders">
+                                    <i className="fa fa-list"></i>
+                                    <span className='navlink-text'>My Orders</span>
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/" onClick={this.logOutClick}>
                                     <i className="fa fa-sign-out"></i>
                                     <span className='navlink-text'>Log Out</span>
@@ -56,6 +67,12 @@ class NavBar extends Component {
                     :
                     <nav className="nav">
                         <ul>
+                            <li>
+                                <Link to='/csignup' >Consumer's Sign Up</Link>
+                            </li>
+                            <li>
+                                <Link to='/user/clogin' >Consumer's Login</Link>
+                            </li>
                             <li>
                                 <Link to='/signup' >Farmer's Sign Up</Link>
                             </li>

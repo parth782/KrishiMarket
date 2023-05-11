@@ -1,10 +1,16 @@
-import React from "react"
+// import React from "react"
 import config from "./config"
 import TokenService from "./services/token-service"
 import ValidationError from "./validationError"
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import Button from "@material-ui/core/Button";
+import React, { useState } from "react";
 
 class ShoppersSearch extends React.Component {
+    countUp = {sampleState: '0'}
+    countDown = {sampleState: '0'}
     constructor(props) {
         super(props);
         this.state = {
@@ -71,7 +77,10 @@ class ShoppersSearch extends React.Component {
         window.location = '/'
     }
     render() {
-
+        const {countUp} = this;
+        const {countDown} = this;
+        const setCountUp = countUp => this.setCountUp(countUp);
+        const setCountDown = countDown => this.setCountDown(countDown);
         const msg = this.state.error ? <p>
             {this.state.error}
         </p> :
@@ -104,7 +113,14 @@ class ShoppersSearch extends React.Component {
                                 <td>{item.description} </td>
                                 <td>{item.itemPrice} </td>
                                 <td>{item.itemCount} </td>
-                                <td><Link to={itemDetailsUrl}>Contact </Link></td>
+                                <td style={{
+                                width: '20%'}}><Link to={itemDetailsUrl}>Contact</Link></td>
+                                <td style={{
+                                    cursor: 'pointer'
+                                }}><ThumbUpIcon /></td>
+                                <td style={{
+                                    cursor: 'pointer'
+                                }}><ThumbDownIcon/></td>
                             </tr>
                         </tbody>
                     )
@@ -149,8 +165,10 @@ class ShoppersSearch extends React.Component {
                             }
                             >
                                 Search
-                        </button>
-
+                            </button>
+                            {/* <Link className="go-button" to="/" type='submit'>
+                                <span className='navlink-text'>Search</span>
+                            </Link> */}
                             <Link className="show-button" to="/" onClick={this.ShowAll}>
                                 <span className='navlink-text'>Show all</span>
                             </Link>
