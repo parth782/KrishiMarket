@@ -3,6 +3,8 @@ import styles from "./App.css";
 import ValidationError from "./validationError";
 import AuthApiService from "./services/auth-api-service";
 import TokenService from "./services/token-service.js";
+import RadioGroup from "./components/RadioGroup";
+import { UserIcon } from "@heroicons/react/24/solid";
 
 class Login extends React.Component {
   constructor(props) {
@@ -95,7 +97,22 @@ class Login extends React.Component {
       <div className="Fast">
         <div className="Login">
           <section id="loginPage">
-            <h2 style={{ padding: "7px" }}>Login</h2>
+            <h2 style={{ padding: "0px" }}>Login</h2>
+            <div className="mx-auto w-96 shadow my-1">
+              <RadioGroup
+                onChange={(option) => console.log(option)}
+                options={[
+                  <div className="flex flex-1 justify-around">
+                    <span>Farmer</span>
+                    <UserIcon className="w-4" />
+                  </div>,
+                  <div className="flex  flex-1 justify-around">
+                    <span>Consumer</span>
+                    <UserIcon className="w-4" />
+                  </div>,
+                ]}
+              />
+            </div>
 
             <form className="loginForm" onSubmit={this.loginUser}>
               <div className="errorMessage" style={{ color: "white" }}>
@@ -134,21 +151,13 @@ class Login extends React.Component {
               <div className="signUp">
                 <p style={{ color: "white" }}>Do not have an account? </p>
                 <p>
-                  <a
-                    href="/signup"
-                    style={{ color: "white", textDecoration: "underline" }}
-                  >
+                  <a href="/signup" style={{ textDecoration: "underline" }}>
                     Sign up here
                   </a>
                 </p>
               </div>
             </form>
           </section>
-          <div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-          </div>
         </div>
       </div>
     );

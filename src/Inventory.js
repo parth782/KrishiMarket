@@ -76,21 +76,24 @@ class Inventory extends React.Component {
         }
       });
     }
-
     return (
-      <div className="flex-1 flex justify-start items-center flex-row m-6">
-        <section id="InventoryPage" class="flex-row flex-wrap sm:mb-20 mb-6">
-          <table class="table-auto">
+      <div className="flex-1 flex justify-center items-center flex-row m-6">
+        <section class="inventoryTable flex-row flex-wrap sm:mb-20 mb-6 ">
+          <table class="inventoryTable">
             <tbody>
-              <tr className="font-poppins font-medium text-[18px] leading-[27px] text-white">
-                <th className="font-poppins font-medium text-[18px] leading-[27px] text-white">
+              <tr className=" font-poppins font-medium text-[18px] leading-[27px]  text-white">
+                <th className="font-poppins font-medium text-[18px] leading-[27px]  px-4 text-white">
                   Name
                 </th>
-                <th className="font-poppins font-medium text-[18px] leading-[27px] text-white">
+                <th className="font-poppins font-medium text-[18px] leading-[27px] px-4  text-white">
                   Description
                 </th>
-                <th>Price</th>
-                <th>Count</th>
+                <th className="font-poppins font-medium text-[18px] leading-[27px] px-4  text-white">
+                  Price
+                </th>
+                <th className="font-poppins font-medium text-[18px] leading-[27px]  px-4 text-white">
+                  Count
+                </th>
               </tr>
             </tbody>
             {showItemsPage}
@@ -100,5 +103,4 @@ class Inventory extends React.Component {
     );
   }
 }
-
 export default Inventory;

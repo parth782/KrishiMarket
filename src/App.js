@@ -27,7 +27,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <BrowserRouter>
-          <NavBar />
+          {/* <NavBar /> */}
           <Switch>
             <div className="bg-primary w-full overflow-hidden">
               <Route path="/contact/:userId" component={Contact} />
@@ -36,28 +36,23 @@ class App extends React.Component {
                   <Navbar />
                 </div>
               </div>
-
               <Route exact path="/" component={Landing} />
-
               <Route path="/user/login" component={Login} />
-
               <Route path="/signup" component={Register} />
-
               <Route path="/add-item" component={AddItems} />
-
               <Route path="/inventory" component={Inventory} />
-
               <Route path="/item-details/:itemId" component={ItemDetails} />
-
+              {/* <Route path="/myorders" component={myorders} /> */}
+              {/* <Route path="/MYORDERSR" component={MYORDERS} /> */}
               <div
                 className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}
               >
                 <div className={`${styles.boxWidth}`}>
-                  <Stats />
+                  {/* <Stats />
                   <Business />
                   <Billing />
                   <Testimonials />
-                  <Clients />
+                  <Clients /> */}
                   <Footer />
                 </div>
               </div>
