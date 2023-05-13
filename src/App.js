@@ -1,57 +1,67 @@
-import React from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import './App.css'
-import Landing from './Landing'
-import AddItems from './AddItems'
-import Inventory from './Inventory'
-import Login from './Login'
-import Register from './Register'
-import NavBar from './NavBar'
-import Error from './Error'
-import ItemDetails from './ItemDetails'
-import Contact from './Contact'
-import Myorders from './Myorders'
-import cRegister from './cRegister'
-import cLogin from './cLogin'
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import "./App.css";
+import Landing from "./Landing";
+import AddItems from "./AddItems";
+import Inventory from "./Inventory";
+import Login from "./Login";
+import Register from "./Register";
+import NavBar from "./NavBar";
+import Error from "./Error";
+import ItemDetails from "./ItemDetails";
+import Contact from "./Contact";
+
+import styles from "./jsmaster";
+import {
+  Billing,
+  Business,
+  Clients,
+  Footer,
+  Navbar,
+  Stats,
+  Testimonials,
+} from "./components";
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {/* <Myorders/> */}
-          <BrowserRouter>
-            <NavBar />
-            <Switch>
-              <Route exact path='/' component={Landing} />
-
-              <Route path='/user/login' component={Login} />
-
-              <Route path='/user/clogin' component={cLogin} />
-
-              <Route path='/csignup' component={cRegister} />
-
-              <Route path='/Myorders' component={Myorders}/> 
-
-              <Route path='/signup' component={Register} />
-
-              <Route path='/add-item' component={AddItems} />
-
-              <Route path='/inventory' component={Inventory} />
-
-              <Route path='/item-details/:itemId' component={ItemDetails} />
-
-              <Route path='/contact/:userId' component={Contact} />
-
-              <Route component={Error} />
-
-
-            </Switch>
-          </BrowserRouter>
-
+        <BrowserRouter>
+          {/* <NavBar /> */}
+          <Switch>
+            <div className="bg-primary w-full overflow-hidden">
+              <Route path="/contact/:userId" component={Contact} />
+              <div className={`${styles.paddingX} ${styles.flexCenter}`}>
+                <div className={`${styles.boxWidth}`}>
+                  <Navbar />
+                </div>
+              </div>
+              <Route exact path="/" component={Landing} />
+              <Route path="/user/login" component={Login} />
+              <Route path="/signup" component={Register} />
+              <Route path="/add-item" component={AddItems} />
+              <Route path="/inventory" component={Inventory} />
+              <Route path="/item-details/:itemId" component={ItemDetails} />
+              {/* <Route path="/myorders" component={myorders} /> */}
+              {/* <Route path="/MYORDERSR" component={MYORDERS} /> */}
+              <div
+                className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}
+              >
+                <div className={`${styles.boxWidth}`}>
+                  {/* <Stats />
+                  <Business />
+                  <Billing />
+                  <Testimonials />
+                  <Clients /> */}
+                  <Footer />
+                </div>
+              </div>
+            </div>
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
-
 }
 
 export default App;
