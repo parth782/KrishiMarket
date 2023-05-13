@@ -412,8 +412,8 @@ Content styles (Main Module)
 .button-wrapper button, .button-wrapper a {
 display: inline-block;
 width:30%;
-margin-right: 0;
-margin-left: 0;
+margin-right: 20px;
+margin-left: 20px;
 }
 
 .button-wrapper a {
@@ -571,6 +571,7 @@ margin-left: 0;
 
 .Login input {
   border: solid 1px;
+  color: white;
 }
 
 .errorMessage {
@@ -657,6 +658,7 @@ background-color: rgba(220, 214, 214, 0.068);
 
 .Register input {
   border: solid 1px;
+  color: white;
 }
 
 
@@ -685,6 +687,8 @@ background-color: rgba(220, 214, 214, 0.068);
 
 .AddItems input {
   border: solid 1px;
+  color: white;
+
 }
 
 .AddItems input:hover{

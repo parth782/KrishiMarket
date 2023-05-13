@@ -163,20 +163,20 @@ class AddItems extends React.Component {
         <div className="AddItems">
           <section id="AddItemsPage">
             <form className="additemForm" onSubmit={this.addItem}>
-              <label htmlFor="itemName">Item name</label>
+              <label>Item name</label>
               <input
                 type="text"
                 id="itemName"
                 name="itemName"
                 placeholder="itemName"
-                className="font-poppins font-medium text-[18px] leading-[27px] text-white"
                 onChange={(e) => this.changeItemName(e.target.value)}
                 required
               />
               {this.state.itemName.touched && (
                 <ValidationError message={this.validateItemName()} />
               )}
-              <label htmlFor="itemDescription">Item description</label>
+
+              <label>Item description</label>
               <input
                 type="text"
                 id="itemDescription"
@@ -189,7 +189,7 @@ class AddItems extends React.Component {
                 <ValidationError message={this.validateItemDescription()} />
               )}
 
-              <label htmlFor="itemPrice">Item price</label>
+              <label >Item price</label>
               <input
                 type="text"
                 id="itemPrice"
@@ -202,7 +202,7 @@ class AddItems extends React.Component {
                 <ValidationError message={this.validateItemPrice()} />
               )}
 
-              <label htmlFor="itemCount">Item count</label>
+              <label>Item count</label>
               <input
                 type="text"
                 id="itemCount"

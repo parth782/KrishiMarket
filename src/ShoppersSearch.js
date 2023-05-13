@@ -93,9 +93,11 @@ class ShoppersSearch extends React.Component {
                 <td>{item.description} </td>
                 <td>{item.itemPrice} </td>
                 <td>{item.itemCount} </td>
-                <td>
+
+                {/* If Farmer then Dont Show this otherwise Show this */}
+                {/* <td>
                   <Link to={itemDetailsUrl}>Contact </Link>
-                </td>
+                </td> */}
               </tr>
             </tbody>
           );
@@ -126,7 +128,7 @@ class ShoppersSearch extends React.Component {
               <button
                 className="go-button"
                 type="submit"
-                style={{ fontWeight: "100" }}
+                style={{ fontWeight: "100", fontSize: '18px' }}
               >
                 Search
               </button>
@@ -134,7 +136,7 @@ class ShoppersSearch extends React.Component {
                 className="show-button"
                 onClick={this.ShowAll}
                 type="submit"
-                style={{ fontWeight: "100" }}
+                style={{ fontWeight: "100", fontSize: '18px' }}
               >
                 Show all
               </button>
