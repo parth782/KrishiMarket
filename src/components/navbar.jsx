@@ -4,6 +4,9 @@ import { close, logo, menu } from "../assets";
 import { navLinks } from "../constants";
 import { Link } from "react-router-dom";
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSackDollar } from '@fortawesome/free-solid-svg-icons';
+
 
 const Navbar = () => {
   const [active, setActive] = useState("Home");
@@ -82,6 +85,12 @@ const Navbar = () => {
               <Link to="/inventory">
                 <i className="fa fa-list"></i>
                 <span className="navlink-text"> Inventory</span>
+              </Link>
+            </li>
+            <li className="font-poppins font-normal cursor-pointer text-[18px]">
+              <Link to="/signup">
+                <FontAwesomeIcon icon={faSackDollar} />
+                  100
               </Link>
             </li>
             <li>

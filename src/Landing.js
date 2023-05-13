@@ -3,7 +3,7 @@ import styles1 from "./App.css";
 // import Footer from "./Footer";
 import Header from "./Header";
 import ShoppersSearch from "./ShoppersSearch";
-
+import VideoCarousel  from "./VideoCarousel";
 import styles from "./jsmaster";
 import {
   Billing,
@@ -42,6 +42,9 @@ class Landing extends React.Component {
           </section>
           {/* <Footer /> */}
         </div>
+        {/* If Farmer show Vid Carousel otherwise Don't Show */}
+        <VideoCarousel/>
+        <br></br>
         <div className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
             <Stats />

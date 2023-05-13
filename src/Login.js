@@ -77,7 +77,7 @@ class Login extends React.Component {
 
         TokenService.saveAuthToken(response.authToken);
         TokenService.saveUserId(response.userId);
-        window.location = "/add-item/";
+        window.location = "/";
       })
       .catch((err) => {
         this.setState({
