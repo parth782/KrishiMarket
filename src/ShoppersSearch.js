@@ -17,14 +17,14 @@ class ShoppersSearch extends React.Component {
     };
   }
   componentDidMount() {
-    let getItemsByUserIdUrl = `${config.API_ENDPOINT}/items/`;
+    let getItemsByUserIdUrl = `${config.INVENTORY_API_ENDPOINT}/all/`;
 
     fetch(getItemsByUserIdUrl)
       .then((itemsInList) => itemsInList.json())
       .then((itemsInList) => {
         console.log(itemsInList);
         this.setState({
-          itemsByUserId: itemsInList,
+          itemsByUserId: itemsInList.inventory,
         });
         // console.log(this.state);
       })
@@ -84,15 +84,16 @@ class ShoppersSearch extends React.Component {
       // display details for each one of the items
       showItemsPage = this.state.itemsByUserId.map((item, key) => {
         // console.log(item)
-        let itemDetailsUrl = `/contact/${item.users_id}`;
+        //let itemDetailsUrl = `/contact/${item.users_id}`;
         if (item) {
           return (
             <tbody key={key}>
               <tr>
                 <td>{item.name} </td>
                 <td>{item.description} </td>
-                <td>{item.itemPrice} </td>
-                <td>{item.itemCount} </td>
+                <td>{item.pricePerUnit} </td>
+                <td>{item.quantity} </td>
+                <td>{item.Farmer.city} </td>
 
                 {/* If Farmer then Dont Show this otherwise Show this */}
                 {/* <td>
@@ -157,9 +158,9 @@ class ShoppersSearch extends React.Component {
               <tr>
                 <th>Name</th>
                 <th>Description</th>
-
-                <th>Price</th>
-                <th>Count</th>
+                <th>PricePerUnit</th>
+                <th>Quantity</th>
+                <th>Area</th>
               </tr>
             </tbody>
             {showItemsPage}

@@ -195,6 +195,26 @@ input[type="text"]:focus, input[type="password"]:focus {
   color:white;
   background-color: rgba(255, 255, 255, 0.086);
 }
+select {
+  width: 90%;
+  border-radius:15px;
+  padding: 15px;
+  margin: 5px 15px 22px 0px;
+  display: inline-flex;
+  border: none;
+  color:gray;
+  background-color: rgba(116, 113, 113, 0.234);
+}
+
+select:focus {
+  border: none;
+  color:white;
+  background-color: rgba(255, 255, 255, 0.086);
+}
+select option{
+  color:gray;
+  background-color: rgba(116, 113, 113, 0.234);
+}
 
 /* Set a style for the submit button */
 
@@ -854,4 +874,10 @@ place all the mobile tables styles below this line
   body {
     border: 3px solid #02b95b
   }
+}
+
+.input-error{
+  font-size: 15px;
+  margin-top:-26px;
+
 }

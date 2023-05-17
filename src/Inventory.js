@@ -3,6 +3,7 @@ import styles from "./App.css";
 import config from "./config";
 import TokenService from "./services/token-service";
 import { Link } from "react-router-dom";
+import AuthApiService from "./services/auth-api-service";
 
 class Inventory extends React.Component {
   constructor(props) {
@@ -13,27 +14,25 @@ class Inventory extends React.Component {
   }
 
   componentDidMount() {
-    let currentUser = TokenService.getUserId();
-    // console.log(currentUser)
-
+   
     //if the user is not logged in, send him to landing page
-    if (!TokenService.hasAuthToken()) {
-      window.location = "/";
+    if (!TokenService.hasAuthToken()||TokenService.getRole() != "farmer") {
+      window.location = "/login";
     }
 
-    let getItemsByUserIdUrl = `${config.API_ENDPOINT}/items/user/${currentUser}`;
+    AuthApiService.FetchInvFarmer().then((res) => {
+      console.log(res)
+      if (res.status == "success") {
 
-    fetch(getItemsByUserIdUrl)
-      .then((itemsInList) => itemsInList.json())
-      .then((itemsInList) => {
-        console.log(itemsInList);
         this.setState({
-          itemsByUserId: itemsInList,
-        });
-        // console.log(this.state);
-      })
+          itemsByUserId: res.inventory
+        })
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
 
-      .catch((error) => this.setState({ error }));
+   
   }
 
   render() {
@@ -65,10 +64,13 @@ class Inventory extends React.Component {
                   {item.description}{" "}
                 </td>
                 <td className="font-poppins font-medium text-[18px] leading-[27px] text-white">
-                  {item.itemPrice}{" "}
+                  {item.pricePerUnit}{" "}
                 </td>
                 <td className="font-poppins font-medium text-[18px] leading-[27px] text-white">
-                  {item.itemCount}{" "}
+                  {item.quantity}{" "}
+                </td>
+                <td className="font-poppins font-medium text-[18px] leading-[27px] text-white">
+                  {item.unit}{" "}
                 </td>
               </tr>
             </tbody>
@@ -89,10 +91,13 @@ class Inventory extends React.Component {
                   Description
                 </th>
                 <th className="font-poppins font-medium text-[18px] leading-[27px] px-4  text-white">
-                  Price
+                  Price Per Unit
                 </th>
                 <th className="font-poppins font-medium text-[18px] leading-[27px]  px-4 text-white">
-                  Count
+                 Quantity
+                </th>
+                <th className="font-poppins font-medium text-[18px] leading-[27px]  px-4 text-white">
+                Minimum Unit
                 </th>
               </tr>
             </tbody>

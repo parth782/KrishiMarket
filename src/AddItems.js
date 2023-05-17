@@ -5,56 +5,66 @@ import ValidationError from "./validationError";
 
 class AddItems extends React.Component {
   constructor(props) {
+   
     super(props);
     this.state = {
-      itemName: {
+      name: {
         value: "",
         touched: false,
       },
-      itemDescription: {
+      description: {
         value: "",
         touched: false,
       },
-      itemPrice: {
-        value: "",
+      quantity: {
+        value: 0,
         touched: false,
       },
-      itemCount: {
-        value: "",
+      unit: {
+        value: 0,
+        touched: false,
+      },
+      pricePerUnit: {
+        value: 0,
         touched: false,
       },
     };
   }
 
-  changeItemName(itemName) {
+  changeItemName(name) {
     this.setState({
-      itemName: { value: itemName, touched: true },
+      name: { value: name, touched: true },
     });
   }
 
-  changeItemDescription(itemDescription) {
+  changeDescription(description) {
     this.setState({
-      itemDescription: { value: itemDescription, touched: true },
+      description: { value: description, touched: true },
     });
   }
 
-  changeItemPrice(itemPrice) {
+  changePricePerUnit(pricePerUnit) {
     this.setState({
-      itemPrice: { value: itemPrice, touched: true },
+      pricePerUnit: { value: pricePerUnit, touched: true },
     });
   }
 
-  changeItemCount(itemCount) {
+  changeQuantity(quantity) {
     this.setState({
-      itemCount: { value: itemCount, touched: true },
+      quantity: { value: quantity, touched: true },
+    });
+  }
+  changeUnit(unit) {
+    this.setState({
+      unit: { value: unit, touched: true },
     });
   }
 
   validateItemName() {
-    const itemName = this.state.itemName.value.trim();
-    if (itemName.length === 0) {
+    const name = this.state.name.value.trim();
+    if (name.length === 0) {
       return <p className="input-error">Item name is required</p>;
-    } else if (itemName.length < 2) {
+    } else if (name.length < 2) {
       return (
         <p className="input-error">
           Item name must be at least 2 characters long
@@ -63,11 +73,11 @@ class AddItems extends React.Component {
     }
   }
 
-  validateItemDescription() {
-    const itemDescription = this.state.itemDescription.value.trim();
-    if (itemDescription.length === 0) {
+  validateDescription() {
+    const description = this.state.description.value.trim();
+    if (description.length === 0) {
       return <p className="input-error">Item description is required</p>;
-    } else if (itemDescription.length < 2) {
+    } else if (description.length < 2) {
       return (
         <p className="input-error">
           Item description must be at least 2 characters long
@@ -76,36 +86,35 @@ class AddItems extends React.Component {
     }
   }
 
-  validateItemPrice() {
-    const itemPrice = this.state.itemPrice.value.trim();
-    if (itemPrice.length === 0) {
-      return <p className="input-error">Item price is required</p>;
-    } else if (itemPrice.length < 1) {
+  validatePricePerUnit() {
+    const pricePerUnit = this.state.pricePerUnit.value.trim();
+    if (pricePerUnit < 1) {
       return (
         <p className="input-error">
-          Item price must be at least 1 characters long
+          Item price cannot be zero
         </p>
       );
     }
   }
 
-  validateItemCount() {
-    const itemCount = this.state.itemCount.value.trim();
-    if (itemCount.length === 0) {
-      return <p className="input-error">Item count is required</p>;
-    } else if (itemCount.length < 1) {
-      return (
-        <p className="input-error">
-          Item price must be at least 1 characters long
-        </p>
-      );
+  validateQuantity() {
+    const quantity = this.state.quantity.value.trim();
+    if (quantity < 1) {
+      return <p className="input-error">Quantity canot be zero</p>;
     }
+
+  }
+  validateUnit() {
+    const unit = this.state.unit.value.trim();
+    if (unit < 1) {
+      return <p className="input-error">Unit canot be zero</p>;
+    }
+
   }
 
   componentDidMount() {
-    //if the user is not logged in, send him to landing page
-    if (!TokenService.hasAuthToken()) {
-      window.location = "/";
+    if (!TokenService.hasAuthToken() || TokenService.getRole() != "farmer") {
+      window.location = '/login'
     }
   }
 
@@ -120,37 +129,35 @@ class AddItems extends React.Component {
       data[value[0]] = value[1];
     }
 
-    let user_id = TokenService.getUserId();
 
-    let { itemName, itemDescription, itemPrice, itemCount } = data;
-    //get the current date in unix format
-    const timeElapsed = Date.now();
-    //conver the unix format date into string
-    const today = new Date(timeElapsed);
-    // console.log(itemName, itemDescription, itemPrice, itemCount)
+    let { name, pricePerUnit, quantity, description, unit } = data;
+
+
     let payload = {
-      users_id: user_id,
-      name: itemName,
-      description: itemDescription,
-      itemPrice: itemPrice,
-      itemCount: itemCount,
-      img: "no-img.jpg",
+      name: name,
+      description: description,
+      quantity: quantity,
+      unit: unit,
+      pricePerUnit: pricePerUnit,
     };
 
     console.log(payload);
 
-    ////////////////POST ITEMS//////////////////////////////////////////////
 
-    fetch(`${config.API_ENDPOINT}/items`, {
+
+    fetch(`${config.INVENTORY_API_ENDPOINT}/`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        "authtoken": TokenService.getAuthToken(),
       },
       body: JSON.stringify(payload),
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        window.location = "/inventory";
+        if (responseJson.status == "success") {
+          window.location = "/";
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -166,53 +173,66 @@ class AddItems extends React.Component {
               <label>Item name</label>
               <input
                 type="text"
-                id="itemName"
-                name="itemName"
+                id="name"
+                name="name"
                 placeholder="itemName"
                 onChange={(e) => this.changeItemName(e.target.value)}
                 required
               />
-              {this.state.itemName.touched && (
+              {this.state.name.touched && (
                 <ValidationError message={this.validateItemName()} />
               )}
 
               <label>Item description</label>
               <input
                 type="text"
-                id="itemDescription"
-                name="itemDescription"
-                placeholder="Sweet"
-                onChange={(e) => this.changeItemDescription(e.target.value)}
+                id="description"
+                name="description"
+                placeholder="Description"
+                onChange={(e) => this.changeDescription(e.target.value)}
                 required
               />
-              {this.state.itemDescription.touched && (
-                <ValidationError message={this.validateItemDescription()} />
+              {this.state.description.touched && (
+                <ValidationError message={this.validateDescription()} />
               )}
 
-              <label >Item price</label>
+              <label >Price Per Unit</label>
               <input
                 type="text"
-                id="itemPrice"
-                name="itemPrice"
+                id="pricePerUnit"
+                name="pricePerUnit"
                 placeholder="Item price"
-                onChange={(e) => this.changeItemPrice(e.target.value)}
+                onChange={(e) => this.changePricePerUnit(e.target.value)}
                 required
               />
-              {this.state.itemPrice.touched && (
-                <ValidationError message={this.validateItemPrice()} />
+              {this.state.pricePerUnit.touched && (
+                <ValidationError message={this.validatePricePerUnit()} />
               )}
 
-              <label>Item count</label>
+              <label>Quantity</label>
               <input
                 type="text"
-                id="itemCount"
-                name="itemCount"
+                id="quantity"
+                name="quantity"
                 placeholder="Item count"
-                onChange={(e) => this.changeItemCount(e.target.value)}
+                onChange={(e) => this.changeQuantity(e.target.value)}
                 required
               />
-              {this.state.itemCount.touched && (
-                <ValidationError message={this.validateItemCount()} />
+              {this.state.quantity.touched && (
+                <ValidationError message={this.validateQuantity()} />
+              )}
+
+              <label>Unit</label>
+              <input
+                type="text"
+                id="unit"
+                name="unit"
+                placeholder="Item Minimum Quantity"
+                onChange={(e) => this.changeUnit(e.target.value)}
+                required
+              />
+              {this.state.unit.touched && (
+                <ValidationError message={this.validateUnit()} />
               )}
 
               <button className="go-button" type="submit">

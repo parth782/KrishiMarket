@@ -8,84 +8,157 @@ import { UserIcon } from "@heroicons/react/24/solid";
 
 class Login extends React.Component {
   constructor(props) {
+    if(TokenService.hasAuthToken()){
+      window.location="/";
+    }
     super(props);
     this.state = {
-      userName: {
+      mobileNo: {
         value: "",
         touched: false,
       },
-      password: {
+      otp: {
         value: "",
-        touched: false,
+        touched: false
       },
+      viewOtpform: false,
       LogInUserID: 0,
       error: null,
+      role: null,
     };
   }
 
-  changeUsername(userName) {
+  changeMobileNo(mobileNo) {
+
     this.setState({
-      userName: { value: userName },
+      mobileNo: { value: mobileNo, touched: true },
     });
   }
-
-  changePassword(password) {
+  changeRole(option) {
     this.setState({
-      password: { value: password },
-    });
+      role: option
+    })
   }
 
-  validateUserName() {
-    const userName = this.state.userName.value.trim();
-    if (userName.length < 2 && userName.length > 0) {
+  changeOtp(otp) {
+    this.setState({
+      otp: { value: otp, touched: true }
+    })
+  }
+
+
+
+  validateMobileNo() {
+    const mobile_no = this.state.mobileNo.value.trim();
+    if (mobile_no.length === 0) {
       return (
-        <div style={{ color: "white" }}>
-          Username must be at least 2 characters long
-        </div>
+        <p className="input-error" style={{ color: "red" }}>
+          Mobile No is required
+        </p>
+      );
+    } else if (mobile_no.length < 10 || !(mobile_no > 1000000000 && mobile_no < 9999999999)) {
+      return (
+        <p className="input-error" style={{ color: "red" }}>
+          Mobile No must be equal to 10 Integer numbers Only
+        </p>
       );
     }
   }
 
-  validatePassword() {
-    const password = this.state.password.value.trim();
-    if ((password.length < 6 || password.length > 72) && password.length > 0) {
+  validateOtp() {
+    const otp = this.state.otp.value.trim();
+    if (otp.length === 0) {
       return (
-        <div style={{ color: "white" }}>
-          Incorrect Password! Password must be between 6 and 72 characters long.
-        </div>
+        <p className="input-error" style={{ color: "red" }}>
+          Mobile No is required
+        </p>
       );
-    } else if (!password.match(/[0-9]/) && password.length > 0) {
+    } else if (otp.length < 6) {
       return (
-        <div style={{ color: "white" }}>
-          Password must contain at least one number.
-        </div>
+        <p className="input-error" style={{ color: "red" }}>
+          Mobile No must be equal to 6 characters long
+        </p>
       );
     }
   }
+
+
 
   loginUser = (event) => {
     event.preventDefault();
-    const { userName, password } = event.target;
-    //console.log("username:", userName.value, "password:", password.value);
-    AuthApiService.postLogin({
-      user_name: userName.value,
-      password: password.value,
-    })
-
-      .then((response) => {
-        // console.log("response ID", response);
-
-        TokenService.saveAuthToken(response.authToken);
-        TokenService.saveUserId(response.userId);
-        window.location = "/";
-      })
-      .catch((err) => {
-        this.setState({
-          error: "Username or password is invalid",
-        });
-        // console.log(err);
+    const mobileNo = this.state.mobileNo.value;
+    if (this.state.role != 0 && this.state.role != 1) {
+      this.setState({
+        error: "Invalid Role",
       });
+
+    }
+    else {
+
+      AuthApiService.postLogin({
+        mobileNo: mobileNo,
+        role: this.state.role
+      })
+
+        .then((response) => {
+          console.log(response);
+          if (response.status == "success") {
+            this.setState({
+              viewOtpform: true,
+            });
+
+
+          }
+          else {
+            this.setState({ error: "Some Error Occured" });
+          }
+
+
+        })
+        .catch((err) => {
+          this.setState({
+            error: "Some Error Occured",
+          });
+          console.log(err);
+        });
+    }
   };
+
+  verifyOtp = (event) => {
+    event.preventDefault();
+    const otp = this.state.otp.value;
+    AuthApiService.verifyOtp({
+      otp: otp,
+      role: this.state.role,
+      mobileNo: this.state.mobileNo.value
+    }).then((response) => {
+      console.log(response);
+      if (response.status == "success") {
+        console.log(response)
+        TokenService.saveAuthToken(response.token);
+        TokenService.saveRole(response.role);
+        TokenService.saveIsUpdate(response.isUpdate);
+        if (response.isUpdate == 1) {
+          window.location = '/'
+        }
+        else {
+          window.location = '/profile'
+        }
+      }
+      else {
+        this.setState({ error: "Some Error Occured" });
+      }
+
+    }).catch((err) => {
+      console.log(err);
+      this.setState({
+        error: "Some Error Occured"
+      });
+    });
+
+  }
+
+
 
   render() {
     const msg = this.state.error ? (
@@ -94,72 +167,96 @@ class Login extends React.Component {
       <div></div>
     );
     return (
-      <div className="Fast">
-        <div className="Login">
-          <section id="loginPage">
-            <h2 style={{ padding: "0px" }}>Login</h2>
-            <div className="mx-auto w-96 shadow my-1">
-              <RadioGroup
-                onChange={(option) => console.log(option)}
-                options={[
-                  <div className="flex flex-1 justify-around">
-                    <span>Farmer</span>
-                    <UserIcon className="w-4" />
-                  </div>,
-                  <div className="flex  flex-1 justify-around">
-                    <span>Consumer</span>
-                    <UserIcon className="w-4" />
-                  </div>,
-                ]}
-              />
+      <div>
+        {!this.state.viewOtpform ? (<div className="Fast">
+          <div className="Login">
+            <section id="loginPage">
+              <h2 style={{ padding: "0px" }}>Login</h2>
+              <div className="mx-auto w-96 shadow my-1">
+                <RadioGroup
+                  onChange={(option) => {
+                    this.changeRole(option)
+                  }}
+                  options={[
+                    <div className="flex flex-1 justify-around">
+                      <span>Farmer</span>
+                      <UserIcon className="w-4" />
+                    </div>,
+                    <div className="flex  flex-1 justify-around">
+                      <span>Consumer</span>
+                      <UserIcon className="w-4" />
+                    </div>,
+                  ]}
+                />
+              </div>
+
+              <form className="loginForm" onSubmit={this.loginUser}>
+                <div className="errorMessage" style={{ color: "white" }}>
+                  {msg}
+                </div>
+                <label htmlFor="mobileNo">Mobile No</label>
+                <input
+                  type="text"
+                  id="mobileNo"
+                  name="mobileNo"
+                  placeholder="MobileNo"
+                  onChange={(e) => {
+
+                    this.changeMobileNo(e.target.value)
+                  }}
+                  required
+                />
+                {this.state.mobileNo.touched && (
+                  <ValidationError message={this.validateMobileNo()} />
+                )}
+
+
+
+
+                <button className="go-button" type="submit">
+                  Go
+                </button>
+
+              </form>
+            </section>
+          </div>
+        </div>) : (
+          <div className="Fast">
+            <div className="Login">
+              <section id="loginPage">
+                <h2 style={{ padding: "0px" }}>Login</h2>
+                <form className="loginForm" onSubmit={this.verifyOtp}>
+                  <div className="errorMessage" style={{ color: "white" }}>
+                    {msg}
+                  </div>
+
+                  <label htmlFor="otp">Otp</label>
+                  <input
+                    type="text"
+                    id="otp"
+                    name="otp"
+                    placeholder="Otp"
+                    onChange={(e) => this.changeOtp(e.target.value)}
+                    required
+                  />
+                  {this.state.otp.touched && (
+                    <ValidationError message={this.validateOtp()} />
+                  )}
+
+
+                  <button className="go-button" type="submit">
+                    Go
+                  </button>
+
+                </form>
+              </section>
             </div>
+          </div>
+        )
 
-            <form className="loginForm" onSubmit={this.loginUser}>
-              <div className="errorMessage" style={{ color: "white" }}>
-                {msg}
-              </div>
-              <label htmlFor="userName">Username</label>
-              <input
-                type="text"
-                id="userName"
-                name="userName"
-                placeholder="Username"
-                onChange={(e) => this.changeUsername(e.target.value)}
-                required
-              />
-              {this.state.userName.touched && (
-                <ValidationError message={this.validateUserName()} />
-              )}
-              <ValidationError message={this.validateUserName()} />
-              <label htmlFor="password">Password</label>
-              <input
-                type="Password"
-                id="password"
-                name="password"
-                placeholder="Password"
-                onChange={(e) => this.changePassword(e.target.value)}
-                required
-              />
-              {this.state.password.touched && (
-                <ValidationError message={this.validatePassword()} />
-              )}
-              <ValidationError message={this.validatePassword()} />
-
-              <button className="go-button" type="submit">
-                Go
-              </button>
-              <div className="signUp">
-                <p style={{ color: "white" }}>Do not have an account? </p>
-                <p>
-                  <a href="/signup" style={{ textDecoration: "underline" }}>
-                    Sign up here
-                  </a>
-                </p>
-              </div>
-            </form>
-          </section>
-        </div>
+        }
       </div>
+
     );
   }
 }

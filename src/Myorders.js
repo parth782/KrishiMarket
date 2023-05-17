@@ -1,6 +1,12 @@
 import React from 'react'
 
-class Myorders extends React.Component{
+class Myorders extends React.Component {
+    constructor(props) {
+        if (!TokenService.hasAuthToken()) {
+            window.location = '/user/login'
+        }
+        super(props);
+    }
     render() {
 
 
@@ -15,7 +21,7 @@ class Myorders extends React.Component{
         //             <td>No items here</td>
         //      </tr>
         //     </tbody>
-                
+
         // }
         // // if there are items 
         // else {
@@ -42,35 +48,35 @@ class Myorders extends React.Component{
         return (
             <div className="Inventory">
                 <section id="InventoryPage">
-                <table className ="inventoryTable">
-                <colgroup>
-                    <col span = "4"/>
-                    <col span = "4"/>
-                    <col span = "4"/>
-                    <col span = "4"/>
-                </colgroup>
-                
-                <tbody>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
+                    <table className="inventoryTable">
+                        <colgroup>
+                            <col span="4" />
+                            <col span="4" />
+                            <col span="4" />
+                            <col span="4" />
+                        </colgroup>
 
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Date Placed
-                    </th>
-                    <th>
-                        Bill
-                    </th>
-                </tr>
-                </tbody>
-                    {showOrdersPage}
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Date Placed
+                                </th>
+                                <th>
+                                    Bill
+                                </th>
+                            </tr>
+                        </tbody>
+                        {showOrdersPage}
                     </table>
 
                 </section>

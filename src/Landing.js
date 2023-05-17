@@ -14,8 +14,13 @@ import {
   Stats,
   Testimonials,
 } from "./components";
+import TokenService from "./services/token-service";
 
 class Landing extends React.Component {
+  constructor(props){
+    
+     super(props);
+  }
   render() {
     return (
       <div className="bg-primary w-full overflow-hidden">
@@ -43,7 +48,7 @@ class Landing extends React.Component {
           {/* <Footer /> */}
         </div>
         {/* If Farmer show Vid Carousel otherwise Don't Show */}
-        <VideoCarousel/>
+        
         <br></br>
         <div className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
@@ -54,6 +59,7 @@ class Landing extends React.Component {
             <Clients />
           </div>
         </div>
+        <VideoCarousel/>
       </div>
     );
   }

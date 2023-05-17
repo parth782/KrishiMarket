@@ -1,16 +1,13 @@
 import React from 'react'
 // import background from './v915-wit-011-l.jpg'
 // import Carousel from 'react-bootstrap/Carousel';
+import styles from './App.css';
 
 
 const VideoCarousel = () => {
   return (
     <div>
-      <h1 style={{
-        fontSize: '25px',
-        margin: '2em 2em',
-        fontWeight: 'bolder',
-      }}>FEED</h1>
+      <h1 className={styles.heading2} style={{color:"white",padding:"10px 10px",fontSize:"39px",marginTop:"20px"}}>Agro Videos</h1>
       <div className='grid-container' style={{
         display: 'grid',
         gridTemplateColumns: 'auto auto auto',

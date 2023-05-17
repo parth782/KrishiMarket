@@ -2,61 +2,72 @@ import React from "react";
 import config from "./config";
 import TokenService from "./services/token-service";
 import ValidationError from "./validationError";
+import AuthApiService from "./services/auth-api-service";
 
 class ItemDetails extends React.Component {
   constructor(props) {
+
     super(props);
     this.state = {
       itemDetails: {},
 
-      itemName: {
+      name: {
         value: "",
         touched: false,
       },
-      itemDescription: {
+      description: {
         value: "",
         touched: false,
       },
-      itemPrice: {
-        value: "",
+      quantity: {
+        value: 0,
         touched: false,
       },
-      itemCount: {
-        value: "",
+      unit: {
+        value: 0,
+        touched: false,
+      },
+      pricePerUnit: {
+        value: 0,
         touched: false,
       },
     };
   }
 
-  changeItemName(itemName) {
+  changeItemName(name) {
     this.setState({
-      itemName: { value: itemName, touched: true },
+      name: { value: name, touched: true },
     });
   }
 
-  changeItemDescription(itemDescription) {
+  changeDescription(description) {
     this.setState({
-      itemDescription: { value: itemDescription, touched: true },
+      description: { value: description, touched: true },
     });
   }
 
-  changeItemPrice(itemPrice) {
+  changePricePerUnit(pricePerUnit) {
     this.setState({
-      itemPrice: { value: itemPrice, touched: true },
+      pricePerUnit: { value: pricePerUnit, touched: true },
     });
   }
 
-  changeItemCount(itemCount) {
+  changeQuantity(quantity) {
     this.setState({
-      itemCount: { value: itemCount, touched: true },
+      quantity: { value: quantity, touched: true },
+    });
+  }
+  changeUnit(unit) {
+    this.setState({
+      unit: { value: unit, touched: true },
     });
   }
 
   validateItemName() {
-    const itemName = this.state.itemName.value.trim();
-    if (itemName.length === 0) {
+    const name = this.state.name.value.trim();
+    if (name.length === 0) {
       return <p className="input-error">Item name is required</p>;
-    } else if (itemName.length < 2) {
+    } else if (name.length < 2) {
       return (
         <p className="input-error">
           Item name must be at least 2 characters long
@@ -65,11 +76,11 @@ class ItemDetails extends React.Component {
     }
   }
 
-  validateItemDescription() {
-    const itemDescription = this.state.itemDescription.value.trim();
-    if (itemDescription.length === 0) {
+  validateDescription() {
+    const description = this.state.description.value.trim();
+    if (description.length === 0) {
       return <p className="input-error">Item description is required</p>;
-    } else if (itemDescription.length < 2) {
+    } else if (description.length < 2) {
       return (
         <p className="input-error">
           Item description must be at least 2 characters long
@@ -78,53 +89,46 @@ class ItemDetails extends React.Component {
     }
   }
 
-  validateItemPrice() {
-    const itemPrice = this.state.itemPrice.value.trim();
-    if (itemPrice.length === 0) {
-      return <p className="input-error">Item price is required</p>;
-    } else if (itemPrice.length < 1) {
+  validatePricePerUnit() {
+    const pricePerUnit = this.state.pricePerUnit.value.trim();
+    if (pricePerUnit < 1) {
       return (
         <p className="input-error">
-          Item price must be at least 1 characters long
+          Item price cannot be zero
         </p>
       );
     }
   }
 
-  validateItemCount() {
-    const itemCount = this.state.itemCount.value.trim();
-    if (itemCount.length === 0) {
-      return <p className="input-error">Item count is required</p>;
-    } else if (itemCount.length < 1) {
-      return (
-        <p className="input-error">
-          Item price must be at least 1 characters long
-        </p>
-      );
+  validateQuantity() {
+    const quantity = this.state.quantity.value.trim();
+    if (quantity < 1) {
+      return <p className="input-error">Quantity canot be zero</p>;
     }
+
   }
+  validateUnit() {
+    const unit = this.state.unit.value.trim();
+    if (unit < 1) {
+      return <p className="input-error">Unit canot be zero</p>;
+    }
+
+  }
+
 
   componentDidMount() {
-    //if the user is not logged in, send him to landing page
-    if (!TokenService.hasAuthToken()) {
-      window.location = "/";
+    if (!TokenService.hasAuthToken() || TokenService.getRole() != "farmer") {
+      window.location = '/login'
     }
 
     const itemId = this.props.match.params.itemId;
-
-    let getItemDetailsUrl = `${config.API_ENDPOINT}/items/${itemId}`;
-
-    fetch(getItemDetailsUrl)
-      .then((itemDetails) => itemDetails.json())
-      .then((itemDetails) => {
-        console.log(itemDetails);
-        this.setState({
-          itemDetails: itemDetails,
-        });
-        // console.log(this.state);
+    AuthApiService.FetchInvItem(itemId).then((res) => {
+      this.setState({
+        itemDetails: res.inventory
       })
-
-      .catch((error) => this.setState({ error }));
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   updateItem(event) {
@@ -138,41 +142,29 @@ class ItemDetails extends React.Component {
       data[value[0]] = value[1];
     }
     console.log(data);
-    let user_id = TokenService.getUserId();
 
-    let { itemName, itemDescription, itemPrice, itemCount } = data;
-    //get the current date in unix format
-    const timeElapsed = Date.now();
-    //conver the unix format date into string
-    const today = new Date(timeElapsed);
+
+    let { name, pricePerUnit, quantity, description, unit } = data;
 
     let payload = {
-      users_id: user_id,
-      name: itemName,
-      description: itemDescription,
-      itemPrice: itemPrice,
-      itemCount: itemCount,
-      img: "no-img.jpg",
+      name: name,
+      description: description,
+      quantity: quantity,
+      unit: unit,
+      pricePerUnit: pricePerUnit,
     };
 
-    //     console.log(this.props)
 
     const itemId = window.location.href.split("/")[4];
 
-    fetch(`${config.API_ENDPOINT}/items/${itemId}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
+    AuthApiService.UpdateInvItem(itemId, payload).then((res) => {
+      if (res.status == "success") {
         window.location = "/inventory";
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+
   }
 
   render() {
@@ -190,59 +182,72 @@ class ItemDetails extends React.Component {
       showItemsDetailsPage = (
         <li>
           <form className="AddItems" onSubmit={this.updateItem}>
-            <label htmlFor="itemName">Item name</label>
+            <label htmlFor="name">Item name</label>
             <input
               type="text"
-              id="itemName"
-              name="itemName"
-              placeholder="Tomatoes"
+              id="name"
+              name="name"
+              placeholder="itemName"
               defaultValue={this.state.itemDetails.name}
               onChange={(e) => this.changeItemName(e.target.value)}
               required
             />
-            {this.state.itemName.touched && (
+            {this.state.name.touched && (
               <ValidationError message={this.validateItemName()} />
             )}
-            <label htmlFor="itemDescription">Item description</label>
+            <label htmlFor="description">Item description</label>
             <input
               type="text"
-              id="itemDescription"
-              name="itemDescription"
-              placeholder="Sweet"
+              id="description"
+              name="description"
+              placeholder="Description"
               defaultValue={this.state.itemDetails.description}
-              onChange={(e) => this.changeItemDescription(e.target.value)}
+              onChange={(e) => this.changeDescription(e.target.value)}
               required
             />
-            {this.state.itemDescription.touched && (
-              <ValidationError message={this.validateItemDescription()} />
+            {this.state.description.touched && (
+              <ValidationError message={this.validateDescription()} />
             )}
 
-            <label htmlFor="itemPrice">Item price</label>
+            <label htmlFor="pricePerUnit">Price Per Unit</label>
             <input
               type="text"
-              id="itemPrice"
-              name="itemPrice"
+              id="pricePerUnit"
+              name="pricePerUnit"
               placeholder="Item price"
-              defaultValue={this.state.itemDetails.itemPrice}
-              onChange={(e) => this.changeItemPrice(e.target.value)}
+              defaultValue={this.state.itemDetails.pricePerUnit}
+              onChange={(e) => this.changePricePerUnit(e.target.value)}
               required
             />
-            {this.state.itemPrice.touched && (
-              <ValidationError message={this.validateItemPrice()} />
+            {this.state.pricePerUnit.touched && (
+              <ValidationError message={this.validatePricePerUnit()} />
             )}
 
-            <label htmlFor="itemCount">Item count</label>
+            <label htmlFor="quantity">Quantity</label>
             <input
               type="text"
-              id="itemCount"
-              name="itemCount"
-              placeholder="Item count"
-              defaultValue={this.state.itemDetails.itemCount}
-              onChange={(e) => this.changeItemCount(e.target.value)}
+              id="quantity"
+              name="quantity"
+              placeholder="Quantity"
+              defaultValue={this.state.itemDetails.quantity}
+              onChange={(e) => this.changeQuantity(e.target.value)}
               required
             />
-            {this.state.itemCount.touched && (
-              <ValidationError message={this.validateItemCount()} />
+            {this.state.quantity.touched && (
+              <ValidationError message={this.validateQuantity()} />
+            )}
+            <label htmlFor="unit">Quantity</label>
+            <input
+              type="text"
+              id="unit"
+              name="unit"
+              placeholder="Unit"
+              defaultValue={this.state.itemDetails.unit}
+              onChange={(e) => this.changeUnit(e.target.value)}
+              required
+            />
+            {this.state.unit.touched && (
+              <ValidationError message={this.validateUnit()} />
             )}
 
             <button className="go-button" type="submit">
